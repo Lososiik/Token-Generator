@@ -240,12 +240,23 @@ async function main(){
 
   if(choice == 2){
     console.log('If you need any help contact me Lososik#3523 or join my discord server https://discord.gg/vHWJnmNsgZ')
-    await sleep(1000);
-    main()
+    let reactionChoice = prompt('[?]>')
+    if(reactionChoice == 'oh8013b076yufwhahfawfuibb'){
+      null
+    }
+    else{
+      main()
+    }
   }
 
   if(choice == 3){
     await sleep(1000);
+  }
+
+  else{
+    console.log('Missclick???');
+    sleep(1000);
+    main()
   }
 }
 
