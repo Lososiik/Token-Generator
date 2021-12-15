@@ -238,18 +238,13 @@ async function main(){
     }})();
   }
 
-  if(choice == 2){
+  else if(choice == 2){
     console.log('If you need any help contact me Lososik#3523 or join my discord server https://discord.gg/vHWJnmNsgZ')
     let reactionChoice = prompt('[?]>')
-    if(reactionChoice == 'oh8013b076yufwhahfawfuibb'){
-      null
-    }
-    else{
-      main()
-    }
+    reactionChoice = main()
   }
 
-  if(choice == 3){
+  else if(choice == 3){
     await sleep(1000);
   }
 
