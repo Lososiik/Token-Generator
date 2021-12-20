@@ -239,7 +239,7 @@ async function main(){
   }
 
   else if(choice == 2){
-    console.log('If you need any help contact me Lososik#3523 or join my discord server https://discord.gg/vHWJnmNsgZ')
+    console.log('If you need any help contact me Lososik#3523 or join my discord server https://discord.gg/vHWJnmNsgZ and ye this is not my token gen its just remake of one.')
     let reactionChoice = prompt('[?]>')
     reactionChoice = main()
   }
