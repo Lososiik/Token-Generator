@@ -2,6 +2,10 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+const setTitle = require('node-bash-title');
+setTitle('Token Generator');
+
+
 async function main(){
   console.clear()
 
@@ -10,21 +14,24 @@ async function main(){
   const ps = require('prompt-sync')
   const prompt = ps();
 
-  console.log('╭━━━━╮╱╭╮╱╱╱╱╱╱╱╱╭━━━╮╱╱╱╱╱╱╱╱╱╱╱╱╱╭╮');
-  console.log('┃╭╮╭╮┃╱┃┃╱╱╱╱╱╱╱╱┃╭━╮┃╱╱╱╱╱╱╱╱╱╱╱╱╭╯╰╮');
-  console.log('╰╯┃┃┣┻━┫┃╭┳━━┳━╮╱┃┃╱╰╋━━┳━╮╭━━┳━┳━┻╮╭╋━━┳━╮');
-  console.log('╱╱┃┃┃╭╮┃╰╯┫┃━┫╭╮╮┃┃╭━┫┃━┫╭╮┫┃━┫╭┫╭╮┃┃┃╭╮┃╭╯');
+  const colors = require('colors');
+
+  console.log('╭━━━━╮╱╭╮╱╱╱╱╱╱╱╱╭━━━╮╱╱╱╱╱╱╱╱╱╱╱╱╱╭╮'.brightBlue);
+  console.log('┃╭╮╭╮┃╱┃┃╱╱╱╱╱╱╱╱┃╭━╮┃╱╱╱╱╱╱╱╱╱╱╱╱╭╯╰╮'.brightBlue);
+  console.log('╰╯┃┃┣┻━┫┃╭┳━━┳━╮╱┃┃╱╰╋━━┳━╮╭━━┳━┳━┻╮╭╋━━┳━╮'.brightBlue);
+  console.log('╱╱┃┃┃╭╮┃╰╯┫┃━┫╭╮╮┃┃╭━┫┃━┫╭╮┫┃━┫╭┫╭╮┃┃┃╭╮┃╭╯'.brightBlue);
   console.log('╱╱┃┃┃╰╯┃╭╮┫┃━┫┃┃┃┃╰┻━┃┃━┫┃┃┃┃━┫┃┃╭╮┃╰┫╰╯┃┃');
   console.log('╱╱╰╯╰━━┻╯╰┻━━┻╯╰╯╰━━━┻━━┻╯╰┻━━┻╯╰╯╰┻━┻━━┻╯');
-  console.log('[1] Start');
-  console.log('[2] Help');
-  console.log('[3] Exit');
-  let choice = prompt('[?]>')
+  console.log('['+'1'.brightBlue+'] Start');
+  console.log('['+'2'.brightBlue+'] Help');
+  console.log('['+'3'.brightBlue+'] Exit');
+  let choice = prompt('['+'?'.brightBlue+']>')
 
   if(choice == 1){
 
-    console.log('[1] Temp-mail');
-    console.log('[2] 10minemai');
+    console.log('['+'1'.brightBlue+'] Temp-mail');
+    console.log('['+'2'.brightBlue+'] 10minemai');
+    console.log('['+'3'.brightBlue+'] Tempmaildev');
     let emailchoice = prompt('[?]>');
     let tokensname = prompt('Tokens username: ');
     let HowTokens = prompt('How many tokens do you wanna generate: ');
@@ -131,9 +138,9 @@ async function main(){
           return email;
         } catch(e){
           return false;
-      }};
+      }}
 
-      if(emailchoice == 2){
+      else if(emailchoice == 2){
         PuppeteerBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
           blocker.enableBlockingInPage(page2);
         });
@@ -150,12 +157,31 @@ async function main(){
           return email;
         } catch(e){
           return false;
-      }};
+    }}
+
+      else if(emailchoice == 3){
+        PuppeteerBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
+          blocker.enableBlockingInPage(page2);
+        });
+
+        await page2.bringToFront();
+        await page2.goto("https://tempmail.dev/en/Gmail", { waitUntil: 'networkidle2', timeout: 0});
+        var info_id = "#current-mail";
+
+        try {     
+          await page2.waitForSelector('#current-mail');
+          const element = await page2.$("#current-mail");
+          const email = await page2.evaluate(element => element.textContent, element);
+          return email;
+        } catch(e){
+          return false;
+      }
     }
+  }
 
     async function emailvery(page2){
       await page2.bringToFront();
-      if (emailchoice == 1 || 2){
+      if(emailchoice == 1){
         while(true){
           try {
             await page2.waitForSelector('[title*=Discord]', {timeout: 500});
@@ -167,14 +193,38 @@ async function main(){
             return elem;
           } catch(e){};
         }
-    }}
-
+      }else if(emailchoice == 2){
+        while(true){
+          try {
+            await page2.waitForSelector('[title*=Discord]', {timeout: 500});
+            await page2.$eval('[title*=Discord]', e => e.parentNode.click());
+          
+            await page2.waitForSelector("td > a[href*='discord'][style*=background]");
+            const elem = await page2.$eval("td > a[href*='discord'][style*=background]", el => el.href);
+          
+            return elem;
+          } catch(e){};
+        }
+      }else if(emailchoice == 3){
+        while(true){
+          try {
+            await page2.waitForSelector('#inbox-dataList');
+            await page2.click('#inbox-dataList');
+          
+            await page2.waitForSelector("td > a[href*='discord'][style*=background]");
+            const elem = await page2.$eval("td > a[href*='discord'][style*=background]", el => el.href);
+          
+            return elem;
+          } catch(e){};
+        }
+      }
+    }
 
     async function verif2(chrom, link){
       const page = await chrom.newPage();
       await page.goto(link, {"waitUntil" : "networkidle0", "timeout": 60000});
       captchaby(page);
-    }
+      }
 
 
     const nickname = [
@@ -212,12 +262,12 @@ async function main(){
       })
       await captchaby(dspage);
 
-      if(emailchoice == 1 || 2){
-        let verifyy = await emailvery(page2);
-        await verif2(chrome, verifyy);
-      }
+      let verifyy = await emailvery(page2);
+      await verif2(chrome, verifyy);
+
       return token;
     }
+    
 
     (async () => {
       for (let i = 0; i < HowTokens; i++) {
@@ -233,14 +283,15 @@ async function main(){
             browser.close();
           } catch(e){};
         }
+      }
       await sleep(1000);
       main()
-    }})();
+    })();
   }
 
   else if(choice == 2){
     console.log('If you need any help contact me Lososik#3523 or join my discord server https://discord.gg/vHWJnmNsgZ and ye this is not my token gen its just remake of one.')
-    let reactionChoice = prompt('[?]>')
+    let reactionChoice = prompt('['+'?'.brightBlue+']>')
     reactionChoice = main()
   }
 
@@ -249,8 +300,8 @@ async function main(){
   }
 
   else{
-    console.log('Missclick???');
-    sleep(1000);
+    console.log('Missclick???'.red);
+    await sleep(1000);
     main()
   }
 }
