@@ -4,7 +4,8 @@ function sleep(ms) {
 
 const setTitle = require('node-bash-title');
 setTitle('Token Generator');
-
+const fs = require('fs');
+const fetch = require('node-fetch');
 
 async function main(){
   console.clear()
@@ -28,11 +29,15 @@ async function main(){
   let choice = prompt('['+'?'.brightBlue+']>')
 
   if(choice == 1){
-
     console.log('['+'1'.brightBlue+'] Temp-mail');
     console.log('['+'2'.brightBlue+'] 10minemai');
     console.log('['+'3'.brightBlue+'] Tempmaildev');
     let emailchoice = prompt('[?]>');
+    console.log('['+'!'.red+'] Do you want to send your tokens to the webhook? y/n: ');
+    let choicewbwile = prompt('[?]>');
+    if(choicewbwile == 'y'){
+      webhook = prompt('Webhook: ')
+    }
     let tokensname = prompt('Tokens username: ');
     let HowTokens = prompt('How many tokens do you wanna generate: ');
 
@@ -105,12 +110,14 @@ async function main(){
       await dspagee.$eval('button[type=submit]', (el) => el.click());
     }
 
-    async function captchaby(dspagee){
+    async function captchaby(DiscordPage){
       try {
-        await dspagee.waitForSelector('[src*=sitekey]');
+        await DiscordPage.waitForSelector('[src*=sitekey]');
+        await DiscordPage.addScriptTag({content: `hcaptcha.execute()`})
+  
         while(true){
           try{
-            await dspagee.solveRecaptchas();
+            await DiscordPage.solveRecaptchas();
             return true;
           } catch(err) {
             sleep(3000);
@@ -275,7 +282,29 @@ async function main(){
         try {
           const page = await browser.newPage();
           const infos = await create_accinfos(browser, page);
-          accounts.write(infos + "\n");
+          accounts.write(infos + "\n"); 
+          if(choicewbwile == 'y'){
+            let request =  fetch(webhook, {
+              method: 'POST',
+              headers: {
+                        "accept": "*/*",
+                        'accept-encoding': 'gzip, deflate, br',
+                        "accept-language": "en-GB",
+                        "content-length": "90",
+                        "content-type": "application/json",
+                        "origin": "https://discord.com",
+                        "sec-fetch-dest": "empty",
+                        "sec-fetch-mode": "cors",
+                        "sec-fetch-site": "same-origin",
+                        "user-agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) discord/1.0.9003 Chrome/91.0.4472.164 Electron/13.4.0 Safari/537.36",
+                        "x-debug-options": "bugReporterEnabled",
+                        "x-super-properties": "eyJvcyI6IldpbmRvd3MiLCJicm93c2VyIjoiRGlzY29yZCBDbGllbnQiLCJyZWxlYXNlX2NoYW5uZWwiOiJzdGFibGUiLCJjbGllbnRfdmVyc2lvbiI6IjEuMC45MDAzIiwib3NfdmVyc2lvbiI6IjEwLjAuMjI0NjMiLCJvc19hcmNoIjoieDY0Iiwic3lzdGVtX2xvY2FsZSI6InNrIiwiY2xpZW50X2J1aWxkX251bWJlciI6OTkwMTYsImNsaWVudF9ldmVudF9zb3VyY2UiOm51bGx9",
+                },
+              body: JSON.stringify({
+              content: infos
+                })
+              })
+            }
         } catch(e) {
           console.log(e);
         } finally {
